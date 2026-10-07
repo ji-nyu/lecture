@@ -81,24 +81,38 @@ npm -v
 
 ---
 
-## 3. Git으로 프로젝트 받기
+## 3. Git 설치
 
-코드는 GitHub에 있습니다. [ji-nyu/lecture](https://github.com/ji-nyu/lecture) 저장소를 컴퓨터로 복사합니다.
+GitHub에서 프로젝트를 받으려면 Git이 필요합니다.
 
-### Git이 있는지 확인
-
-Anaconda Prompt에 입력합니다.
+1. 브라우저에서 [Git for Windows 다운로드](https://git-scm.com/download/win)를 엽니다.
+2. 64-bit 설치 파일이 자동으로 받아집니다. 받아지지 않으면 **Click here to download**를 누릅니다.
+3. 받은 파일을 실행합니다.
+4. 설치 중 안내는 **기본값 그대로 Next**를 누르면 됩니다.
+   - “Adjusting your PATH environment”가 나오면 **Git from the command line and also from 3rd-party software**가 선택된 채로 두면 됩니다. 그래야 Anaconda Prompt에서도 `git`이 됩니다.
+5. 설치가 끝나면 **Finish**를 누릅니다.
+6. **Anaconda Prompt를 닫았다가 다시 엽니다.**
+7. 아래를 입력하고 Enter를 누릅니다.
 
 ```bat
 git --version
 ```
 
-`git version 2...`처럼 숫자가 나오면 됩니다.
+`git version 2...`처럼 숫자가 나오면 성공입니다.
 
-없다고 나오면 둘 중 하나를 합니다.
+설치 파일을 받기 어렵다면, Anaconda Prompt에서 아래만 실행해도 됩니다.
 
-1. [Git for Windows](https://git-scm.com/download/win)를 받아 설치합니다. 안내는 기본값 그대로 **Next**를 누르면 됩니다. 설치가 끝나면 Anaconda Prompt를 **닫았다가 다시** 엽니다.
-2. 또는 Anaconda Prompt에서 `conda install git -y`를 실행합니다.
+```bat
+conda install git -y
+```
+
+끝난 뒤 다시 `git --version`으로 확인합니다.
+
+---
+
+## 4. Git으로 프로젝트 받기
+
+코드는 GitHub에 있습니다. [ji-nyu/lecture](https://github.com/ji-nyu/lecture) 저장소를 컴퓨터로 복사합니다.
 
 ### 저장소 복사 (clone)
 
@@ -123,7 +137,7 @@ dir %USERPROFILE%\Desktop\lecture
 
 ---
 
-## 4. 전용 파이썬 환경 만들기
+## 5. 전용 파이썬 환경 만들기
 
 다른 작업과 섞이지 않도록, 이 프로그램만 쓰는 환경을 만듭니다. **한 번만** 하면 됩니다.
 
@@ -143,7 +157,7 @@ conda activate lecture
 
 ---
 
-## 5. 파이썬 패키지 설치
+## 6. 파이썬 패키지 설치
 
 `(lecture)`가 켜진 상태에서 아래를 그대로 붙여 넣습니다.
 
@@ -158,7 +172,7 @@ pip install -r %USERPROFILE%\Desktop\lecture\requirements.txt
 
 ---
 
-## 6. 화면(프론트엔드) 패키지 설치
+## 7. 화면(프론트엔드) 패키지 설치
 
 같은 Anaconda Prompt에서 아래를 그대로 붙여 넣습니다.
 
@@ -169,7 +183,7 @@ npm install
 
 ---
 
-## 7. 설정 파일 (처음에는 건너뛰어도 됩니다)
+## 8. 설정 파일 (처음에는 건너뛰어도 됩니다)
 
 API 키 없이도 **기본 실행은 가능**합니다. 다만 대본 품질은 키가 있을 때 더 좋아집니다.
 
@@ -193,7 +207,7 @@ Genspark로 실제 PPT를 만들려면 나중에 `GENSPARK_MODE=genspark`와 CLI
 
 ---
 
-## 8. 실행하기
+## 9. 실행하기
 
 프로그램은 **창 두 개**가 필요합니다. 둘 다 `(lecture)` 환경이어야 합니다.
 
@@ -266,7 +280,7 @@ npm run ui
 
 ---
 
-## 9. 처음 사용해 보기
+## 10. 처음 사용해 보기
 
 1. **강의자료로 만들기** 또는 **만든 PPT로 대본·영상**을 고릅니다.
 2. 파일을 고르고 업로드합니다.
