@@ -6,3 +6,4 @@ node_modules/
 frontend/dist/
 MASTER_SPEC.md
 memo.txt
+backend/.env
