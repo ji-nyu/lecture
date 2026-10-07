@@ -1,0 +1,232 @@
+# AIoT와 MQTT 통신 기초
+
+이 자료는 AIoT 환경에서 MQTT가 왜 쓰이는지, 어떤 구성 요소가 있는지, 메시지를 어떻게 전달하는지를 설명하기 위한 강의노트이다.
+문장 속에 데이터가 있다. 온도를 이용하여 장치를 분석해야 한다. 메시지를 보내는 경우가 필요하다.
+위와 같은 일상 문장은 개념명이 아니다. 개념은 아래에서 따로 정의한다.
+
+## 1. AIoT란 무엇인가
+
+AIoT는 Artificial Intelligence of Things의 약자로, 사물인터넷(IoT)에 인공지능(AI)을 결합한 체계를 말한다.
+IoT가 센서와 장치를 연결해 데이터를 모은다면, AIoT는 그 데이터를 학습·추론에 활용해 자동으로 판단한다.
+
+AIoT는 IoT를 대체하는 다른 물건이 아니라 IoT를 확장한 개념이다.
+현장에 가까운 추론은 Edge AI가 맡고, 대량 학습과 장기 분석은 Cloud AI가 맡는 경우가 많다.
+
+## 2. IoT 시스템의 기본 구성
+
+IoT 시스템은 보통 센서, 디바이스, 네트워크, 서버로 구성된다.
+센서는 물리량을 측정하고, 디바이스는 그 값을 디지털 신호로 바꾸며, 네트워크는 값을 전달하고, 서버는 저장과 후처리를 담당한다.
+
+중요한 점은 각 구성 요소가 떨어져 있다는 것이다.
+따라서 구성 요소를 묶는 통신 방식이 없으면 IoT는 성립하지 않는다.
+
+## 3. IoT에서 통신이 중요한 이유
+
+IoT 장치 수는 많고, 배터리와 대역폭은 제한적인 경우가 많다.
+요청-응답 방식만 사용하면 연결 비용이 커지고, 수신자가 잠시 꺼져 있으면 값을 놓치기 쉽다.
+
+그래서 IoT에는 가벼운 연결, 낮은 전력, 다대다 전달, 느슨한 결합을 지원하는 통신 모델이 필요하다.
+
+## 4. MQTT가 필요한 이유
+
+MQTT는 Message Queuing Telemetry Transport의 약자로, 제한된 네트워크에서 센서 값을 전달하기 위해 만들어진 경량 메시징 프로토콜이다.
+HTTP처럼 매번 연결을 열고 닫기보다, 작은 헤더로 토픽 기반 전달을 수행한다.
+
+MQTT가 IoT에 적합한 이유는 다음과 같다.
+- 헤더가 작아 저대역 네트워크에 부담이 적다.
+- Publisher와 Subscriber가 서로를 몰라도 된다.
+- Broker가 연결 상태와 전달을 중앙에서 조정한다.
+- QoS를 통해 신뢰성 수준을 선택할 수 있다.
+
+## 5. MQTT란 무엇인가
+
+MQTT는 발행/구독(Publish/Subscribe) 모델을 사용하는 프로토콜이다.
+클라이언트는 Broker에 연결한 뒤 특정 Topic으로 메시지를 보내거나, Topic을 구독한다.
+
+MQTT Client는 Publisher가 될 수도 있고 Subscriber가 될 수도 있으며, 한 클라이언트가 두 역할을 함께 수행할 수도 있다.
+
+## 6. MQTT의 핵심 구성 요소
+
+MQTT의 핵심 구성 요소는 Publisher, Subscriber, Broker, Topic이다.
+네 요소의 역할을 섞어 이해하면 메시지 경로를 설명할 수 없다.
+각 요소는 다음 절에서 따로 구분한다.
+
+## 7. Publisher의 역할
+
+Publisher는 특정 Topic을 이용하여 Broker에게 메시지를 전송한다.
+Publisher는 Subscriber 주소를 알 필요가 없다.
+Publisher의 책임은 데이터를 만들고 올바른 Topic으로 발행하는 데 있다.
+
+예를 들어 공장의 진동 센서 게이트웨이는 factory/line1/vibration Topic으로 값을 발행할 수 있다.
+
+## 8. Subscriber의 역할
+
+Subscriber는 관심 있는 Topic을 Broker에 등록하고, 해당 Topic의 메시지를 수신한다.
+Subscriber 역시 Publisher의 IP 주소나 위치를 직접 알지 않는다.
+수신 대상의 관리는 Broker가 수행한다.
+
+같은 Topic을 여러 Subscriber가 구독할 수 있으므로, 한 번의 발행이 여러 응용 프로그램으로 전달될 수 있다.
+
+## 9. Broker의 역할
+
+Broker는 MQTT의 중계 중심이다.
+Publisher가 보낸 메시지를 받아, 그 Topic을 구독 중인 Subscriber에게 전달한다.
+Broker는 Client 연결을 관리하고, 세션과 구독 정보를 유지한다.
+
+Broker 슬라이드에서 설명해야 할 범위는 중계, 연결 관리, Publisher-Subscriber 관계까지다.
+QoS 2의 단계, TLS 핸드셰이크, Edge AI 배치, Retained Message의 저장 정책은 이 장의 주제가 아니다.
+
+## 10. Publish와 Subscribe 방식의 특징
+
+Publish/Subscribe 방식에서는 송신자와 수신자가 직접 연결되지 않는다.
+Publisher는 Topic으로 발행하고, Subscriber는 Topic을 구독하며, Broker가 둘을 맞춘다.
+
+이 결합은 느슨하다.
+장치를 추가하거나 응용을 교체할 때 상대방 주소를 다시 설정하지 않아도 된다.
+
+실제 전달 순서는 다음과 같다.
+1. Client가 Broker에 연결한다.
+2. Subscriber가 Topic을 구독한다.
+3. Publisher가 같은 Topic으로 메시지를 발행한다.
+4. Broker가 구독자에게 메시지를 전달한다.
+
+## 11. Topic이란 무엇인가
+
+Topic은 메시지를 분류하는 이름이다.
+파일 경로처럼 슬래시(/)로 계층을 나눈다.
+예: factory/line1/robot3/temperature
+
+Topic은 IP 주소가 아니다.
+같은 계층 구조를 약속하면, 여러 장치가 충돌 없이 값을 나눠 보낼 수 있다.
+
+## 12. Topic의 계층 구조
+
+상위 계층은 공간이나 시스템, 하위 계층은 장치나 측정 항목을 나타내는 식으로 설계한다.
+계층이 깊을수록 구독을 세밀하게 조절할 수 있지만, 이름이 복잡해지면 운영 비용이 커진다.
+
+Wildcard를 쓰면 여러 Topic을 한 번에 구독할 수 있다.
+- `+` 는 한 단계를 대체한다.
+- `#` 는 여러 하위 단계를 대체한다.
+
+예: factory/line1/+/temperature 는 line1의 모든 장치 온도를 구독한다.
+
+## 13. MQTT Message의 구조
+
+MQTT Message는 고정 헤더, 가변 헤더, 페이로드로 구성된다.
+고정 헤더에는 패킷 종류와 남은 길이가 들어가고, 가변 헤더에는 Topic 이름 등이 들어가며, 페이로드에는 실제 값이 실린다.
+
+강의에서 중요한 것은 바이너리 필드를 외우는 일이 아니라, Topic과 페이로드가 분리되어 있다는 점이다.
+
+## 14. MQTT Client와 Broker 연결 과정
+
+MQTT Client가 Broker와 대화하려면 연결 과정이 필요하다.
+순서는 다음과 같다.
+1. Client가 CONNECT 패킷을 보낸다.
+2. Broker가 CONNACK으로 수락 여부를 알린다.
+3. Client는 SUBSCRIBE 또는 PUBLISH를 수행한다.
+4. 주기적으로 PINGREQ/PINGRESP로 연결을 확인한다.
+5. 작업이 끝나면 DISCONNECT로 종료한다.
+
+이 과정은 실제 패킷 순서가 있으므로, 막연한 '동작 흐름'이 아니라 연결 절차로 가르친다.
+
+## 15. 메시지 전달 신뢰성이 필요한 이유
+
+무선 구간에서는 패킷이 유실될 수 있다.
+모든 메시지에 강한 확인을 요구하면 배터리와 대역을 낭비하고, 확인이 전혀 없으면 제어 명령을 잃을 수 있다.
+
+그래서 MQTT는 QoS라는 전달 품질 수준을 제공한다.
+
+## 16. QoS 0, QoS 1, QoS 2
+
+QoS 0은 최대 한 번 전달한다. 확인이 없고 유실될 수 있다. 주기적 센서값에 자주 쓰인다.
+QoS 1은 적어도 한 번 전달한다. PUBACK이 오며 중복이 발생할 수 있다.
+QoS 2는 정확히 한 번 전달한다. 핸드셰이크가 가장 길고 overhead가 크다.
+
+QoS 0, 1, 2는 优劣이 아니라 상황에 따른 선택이다.
+제어 명령에는 높은 수준을, 자주 갱신되는 계측값에는 낮은 수준을 쓰는 편이 일반적이다.
+
+## 17. Retained Message
+
+Retained Message는 Broker가 해당 Topic의 마지막 메시지를 저장해 두는 기능이다.
+새로 구독한 Subscriber는 마지막 상태를 바로 받을 수 있다.
+
+이것은 채팅 기록 전체가 아니라 '현재 상태'를 전달하기 위한 장치다.
+Broker의 기본 중계 역할과 구분해서 이해해야 한다.
+
+## 18. Last Will and Testament
+
+Last Will and Testament(LWT)는 Client가 비정상 종료했을 때 Broker가 대신 발행하는 유언 메시지다.
+연결이 끊어졌음을 다른 Subscriber에게 알릴 수 있다.
+
+정상 DISCONNECT와 달리, Keep Alive 시간 안에 응답이 없으면 LWT가 발행될 수 있다.
+
+## 19. Keep Alive
+
+Keep Alive는 Client와 Broker가 연결이 살아 있는지를 확인하는 주기이다.
+지정한 시간 동안 제어 패킷이 없으면 Broker는 연결이 끊긴 것으로 판단할 수 있다.
+
+Keep Alive는 QoS가 아니며, 메시지 내용의 신뢰성이 아니라 세션 생존을 다룬다.
+
+## 20. MQTT와 HTTP의 차이
+
+HTTP는 기본적으로 요청-응답 모델이다. 클라이언트가 서버에 물어보고 답을 받는다.
+MQTT는 Publish/Subscribe 모델이다. 관심 Topic이 있으면 값이 흘러온다.
+
+HTTP는 웹 자원 접근에 익숙하고, MQTT는 지속 연결과 다대다 이벤트 전달에 익숙하다.
+IoT에서 둘은 서로를 완전히 대체하기보다, 역할이 다른 경우가 많다.
+예를 들어 설정 조회는 HTTP, 센서 스트림은 MQTT를 쓰는 구성이 가능하다.
+
+## 21. MQTT의 장점과 고려사항
+
+장점: 경량 헤더, 느슨한 결합, Topic 기반 확장, QoS 선택, 낮은 대역 적합성.
+고려사항: Broker가 단일 장애점이 될 수 있고, Topic 설계가 허술하면 보안과 운영이 어려워지며, 암호화 없는 평문 통신은 위험하다.
+
+## 22. 스마트홈에서의 MQTT
+
+스마트홈에서는 조명, 온도조절기, 허브가 서로 다른 제조사여도 Topic만 맞으면 이벤트를 주고받을 수 있다.
+예: home/livingroom/light/state
+
+모바일 앱은 Subscriber가 되고, 스위치는 Publisher가 된다.
+상태 복원을 위해 Retained Message를 쓰기도 한다.
+
+## 23. 스마트 팩토리에서의 MQTT 활용
+
+스마트 팩토리에서는 라인별 센서와 제어기가 대량으로 연결된다.
+factory/line2/motor/current 같은 Topic으로 전류값을 모아 Edge에서 이상 징후를 보거나, 상위 MES로 전달할 수 있다.
+
+여기서 MQTT의 가치는 '사례'라는 단어가 아니라, 많은 장치를 느슨하게 연결하면서도 계층적으로 값을 나눌 수 있다는 점에 있다.
+
+## 24. MQTT와 AIoT의 결합
+
+AIoT에서 MQTT는 센서 값을 AI 파이프라인으로 운반하는 통로가 된다.
+장치 계층에서 발행된 값이 Broker를 거쳐 추론 서비스로 들어가고, 추론 결과는 다시 제어 Topic으로 발행될 수 있다.
+
+즉 MQTT는 AIoT의 두뇌가 아니라, 두뇌와 현장을 잇는 신경계에 가깝다.
+
+## 25. Edge AI와 MQTT
+
+Edge AI는 현장 가까운 곳에서 추론한다.
+지연을 줄이고 원본 데이터를 밖으로 덜 보낸다.
+MQTT는 엣지 게이트웨이가 여러 센서 Topic을 모아 로컬 모델에 넣고, 결과만 상위 Topic으로 발행하는 구조를 돕는다.
+
+## 26. Cloud AI와 MQTT
+
+Cloud AI는 장기 학습, 모델 갱신, 전사 대시보드에 강하다.
+현장 값을 MQTT로 수집한 뒤 클라우드 저장소와 학습 파이프라인으로 넘길 수 있다.
+반대로 갱신된 모델 메타데이터나 제어 정책을 MQTT로 현장에 내려보낼 수도 있다.
+
+## 27. MQTT 보안과 TLS
+
+평문 MQTT는 도청과 변조에 취약하다.
+TLS는 전송 구간을 암호화하여 Broker와 Client 사이의 통신을 보호한다.
+아이디/패스워드, 인증서, Topic 접근 제어는 TLS와 함께 논의되어야 한다.
+
+TLS는 Broker의 메시지 중계 개념과 다른 계층의 이야기이므로, 중계 역할을 설명할 때 함께 섞지 않는다.
+
+## 28. MQTT 기반 AIoT 시스템의 전체 구조
+
+센서와 디바이스가 Publisher가 되고, Edge AI와 Cloud AI 서비스가 Subscriber 또는 또 다른 Publisher가 된다.
+가운데 Broker가 Topic 기준으로 값을 나른다.
+QoS, Retained Message, LWT, Keep Alive, TLS는 이 구조를 안정적이고 안전하게 만들기 위한 부가 장치다.
+
+오늘 강의의 목표는 이 전체 그림에서 각 개념이 어느 자리에 있는지 설명할 수 있게 되는 것이다.

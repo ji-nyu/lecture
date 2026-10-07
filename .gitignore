@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+backend/data/
+node_modules/
+frontend/dist/
+memo.txt
+MASTER_SPECS.md

@@ -1,0 +1,27 @@
+# AILectureGen backend
+# 설치: pip install -r requirements.txt
+
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2.6
+python-multipart>=0.0.9
+python-dotenv>=1.0
+
+# 문서 파싱
+pypdf>=4.0
+python-pptx>=0.6.23
+python-docx>=1.0
+
+# LLM (ANALYZER_MODE=hybrid|llm, ENRICHMENT_PROVIDER=openai)
+openai>=1.40
+
+# 강의 영상 (슬라이드 화면 + TTS)
+Pillow>=10.0
+edge-tts>=6.1
+imageio-ffmpeg>=0.5
+pypdfium2>=4.30
+pywin32>=306; sys_platform == "win32"
+
+# 테스트
+pytest>=8.0
+httpx>=0.27
