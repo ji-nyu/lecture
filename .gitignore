@@ -1,7 +1,6 @@
 __pycache__/
 *.pyc
 .pytest_cache/
-.env
 backend/data/
 node_modules/
 frontend/dist/
