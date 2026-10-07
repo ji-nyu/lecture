@@ -384,4 +384,3 @@ cd /d %USERPROFILE%\Desktop\lecture\backend
 python -m pytest
 ```
 
-설계 문서: `MASTER_SPEC.md`
