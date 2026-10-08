@@ -199,6 +199,7 @@ API 키 없이도 **기본 실행은 가능**합니다. 다만 대본 품질은 
 ```env
 LLM_API_KEY=여기에_키
 LLM_MODEL=gpt-4o-mini
+GENSPARK_MODE=genspark
 ```
 
 5. 저장합니다.
